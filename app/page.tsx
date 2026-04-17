@@ -20,16 +20,19 @@ export default function Home() {
         body: JSON.stringify({ to: phone, message }),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
         setStatus('Message sent successfully!');
         setPhone('');
         setMessage('');
       } else {
-        const error = await response.json();
-        setStatus(`Error: ${error.error}`);
+        // Show detailed error message
+        const errorMsg = data.details ? `${data.error}: ${data.details}` : data.error;
+        setStatus(`Error: ${errorMsg}`);
       }
     } catch (error) {
-      setStatus('Error sending message');
+      setStatus('Network error: Unable to connect to server');
     }
   };
 
